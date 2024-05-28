@@ -20,16 +20,22 @@ export const registerUser = async (username : string, email : string, password :
         return {
             username : username,
             email : email,
-            id : insertId
+            id : insertId,
+            profile_img : 'assets/users/default.png'
         };    
     }catch(error : any){
         if(error.code === 'ER_DUP_ENTRY'){
                     const key = error.sqlMessage.split(' ').slice(-1)[0].split('.')[1].slice(0,-1);
                     throw new Error(`${key} is already have account`);
                 }
-        return error
+        return error;
     }
-    
+}
+
+export type RegisBody = {
+    username : string,
+    email : string,
+    password : string
 
 }
 
