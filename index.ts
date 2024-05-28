@@ -26,7 +26,7 @@ app.post("/auth/regis", (req : Request<{},{},RegisBody>, res : Response) => {
         res.status(400).json({
             ok : false,
             message : error.message
-        })
+        });
     });
 
 });
@@ -39,10 +39,8 @@ app.post("/auth/login", (req : Request<{},{},LoginBody>, res : Response) => {
     .catch((error : TypeError) => res.status(400).json({
         ok : false,
         message : error.message
-    }))
-
-})
-
+    }));
+});
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);

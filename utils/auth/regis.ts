@@ -36,6 +36,5 @@ export type RegisBody = {
     username : string,
     email : string,
     password : string
-
 }
 
