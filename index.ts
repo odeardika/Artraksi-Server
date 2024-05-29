@@ -1,7 +1,9 @@
 import express ,{ Request, Response } from "express";
 import { registerUser, RegisBody } from "./utils/auth/regis";
 import { loginUser, LoginBody } from "./utils/auth/login";
+import { getTopSixArticles, Article } from "./utils/database/articles";
 import path from "path";
+import cors from "cors";
 
 type TypeError = {
     message : string
@@ -10,6 +12,7 @@ type TypeError = {
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
 
@@ -28,7 +31,6 @@ app.post("/auth/regis", (req : Request<{},{},RegisBody>, res : Response) => {
             message : error.message
         });
     });
-
 });
 
 app.post("/auth/login", (req : Request<{},{},LoginBody>, res : Response) => {
@@ -41,6 +43,14 @@ app.post("/auth/login", (req : Request<{},{},LoginBody>, res : Response) => {
         message : error.message
     }));
 });
+
+app.get("/articles/top", (req: Request, res : Response) => {
+    getTopSixArticles()
+    .then((data : any) => {
+        res.status(200).json(data);
+    })
+    .catch()
+})
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);

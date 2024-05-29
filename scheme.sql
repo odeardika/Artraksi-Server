@@ -30,6 +30,8 @@ CREATE TABLE articles (
     thumbnail_img VARCHAR(255),
     creator_id INT NOT NULL,
     upload_date DATETIME DEFAULT NOW(),
+    likes INT DEFAULT 0,
+    views INT DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (creator_id) REFERENCES users(id)
 );
@@ -51,6 +53,8 @@ CREATE TABLE blogs (
     thumbnail_img VARCHAR(255),
     creator_id INT NOT NULL,
     upload_date DATETIME DEFAULT NOW(),
+    likes INT DEFAULT 0,
+    views INT DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (creator_id) REFERENCES users(id)
 );
