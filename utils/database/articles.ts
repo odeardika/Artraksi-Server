@@ -1,3 +1,4 @@
+import { get } from "http";
 import { pool as mysqlPool } from "./connector";
 
 export type Article = {
@@ -19,20 +20,8 @@ export const getAllArticles = async () => {
 
 
 export const getTopSixArticles = async () => {
-    const [rawArticles] = await mysqlPool.query("SELECT * FROM articles ORDER BY likes DESC LIMIT 6") as Article[] | any[];
-
-    const articles : Article[] = [];
-    for (const article of rawArticles) {
-        const date = new Date(article.upload_date);
-        article.upload_date = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-        const [user] : any = await mysqlPool.query("SELECT * FROM users WHERE id = ?", [article.creator_id]);
-        article.creator_name = user[0].username;
-        article.creator_profile = user[0].profile_img;
-        articles.push(article);
-    }
-
-    return articles
-      
+    const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY likes DESC LIMIT 6") as Article[] | any[];
+    return articles 
 }
 
 export const likeArticle = async (id : number) => {
@@ -42,3 +31,9 @@ export const likeArticle = async (id : number) => {
     }
     throw new Error("failed to update like");
 }
+
+export const getArticleContentPreview = async (article_id : number) => {
+    const [article] : any = await mysqlPool.query("SELECT text FROM articles_contents WHERE article_id=? AND text_order = 0", [article_id]);
+    return article[0];
+};
+

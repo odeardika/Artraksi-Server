@@ -13,6 +13,12 @@ export const getUser = async (identfire : string, key : string) => {
     return user[0];
 };
 
+export const getUserById = async (user_id : number) => {
+    const [user] : any = await mysqlPool.query(`SELECT * FROM users WHERE id = ?`, [user_id]);
+    return user[0];
+};
+
+
 export type User = {
     id : number
     username : string,
