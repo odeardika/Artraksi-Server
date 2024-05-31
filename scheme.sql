@@ -21,13 +21,6 @@ VALUES
 (2,'user', 'user@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/default.png'),
 (3,'Nicholas Sullivan', 'nicholas.sullivan@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/3.png');
 
-CREATE TABLE communities (
-    id INT NOT NULL AUTO_INCREMENT,
-    comunity_name VARCHAR(255) UNIQUE,
-    logo_img VARCHAR(255),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE articles (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(255) UNIQUE,
@@ -106,3 +99,18 @@ VALUES
 (11, "Namun, meskipun telah lebih terbuka untuk umum, pementasan Tari Bedhaya tetap mempertahankan unsur-unsur kesakralannya. Setiap pementasan dilakukan dengan penuh penghormatan terhadap tradisi dan nilai-nilai yang terkandung di dalamnya.", "paragraph", 1),
 (12, "Kesimpulan", "heading", 1),
 (13, "Tari Bedhaya adalah salah satu warisan budaya yang paling berharga dari Yogyakarta. Keindahan gerakannya, kedalaman filosofinya, dan nilai-nilai spiritual yang dikandungnya menjadikan tarian ini sebagai simbol keanggunan dan kesucian budaya Jawa. Melalui Tari Bedhaya, kita tidak hanya menikmati sebuah pertunjukan seni, tetapi juga memahami makna yang lebih dalam tentang kehidupan, spiritualitas, dan harmoni dengan alam semesta.", "paragraph", 1);
+
+CREATE TABLE communities (
+    id INT NOT NULL AUTO_INCREMENT,
+    comunity_name VARCHAR(255) UNIQUE,
+    comunity_description TEXT,
+    thumbnail_img VARCHAR(255),
+    logo_img VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO communities (comunity_name, comunity_description, logo_img, thumbnail_img)
+VALUES
+("UKJGS UGM", "Unit kesenian Jawa Gaya Surakarta Universitas Gadjah Mada", "assets/communities/logo/1.png", "assets/communities/thumbnail/1.png"),
+("SWAGAYUGAMA UGM", "Unit Kesenian Gaya Yogyakarta Universitas Gadjah Mada", "assets/communities/logo/2.png", "assets/communities/thumbnail/2.png"),
+("KAMASETRA UNY", "Keluarga Mahasiswa Senin Tradisi Universitas Negri Yogyakarta", "assets/communities/logo/3.png", "assets/communities/thumbnail/3.png");
