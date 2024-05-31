@@ -114,3 +114,62 @@ VALUES
 ("UKJGS UGM", "Unit kesenian Jawa Gaya Surakarta Universitas Gadjah Mada", "assets/communities/logo/1.png", "assets/communities/thumbnail/1.png"),
 ("SWAGAYUGAMA UGM", "Unit Kesenian Gaya Yogyakarta Universitas Gadjah Mada", "assets/communities/logo/2.png", "assets/communities/thumbnail/2.png"),
 ("KAMASETRA UNY", "Keluarga Mahasiswa Senin Tradisi Universitas Negri Yogyakarta", "assets/communities/logo/3.png", "assets/communities/thumbnail/3.png");
+
+CREATE TABLE communities_detail (
+    id INT NOT NULL AUTO_INCREMENT,
+    community_id INT NOT NULL,
+    comunity_detail TEXT,
+    leader_name VARCHAR(255),
+    leader_img VARCHAR(255),
+    leader_desc TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (community_id) REFERENCES communities(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)  
+);
+
+INSERT INTO communities_detail (community_id, comunity_detail, leader_name, leader_img, leader_desc)
+VALUES
+(1,"UKJGS UGM atau Unit Kesenian Jawa Gaya Surakarta Universitas Gadjah Mada lahir pada 19 Desember 1968 sebagai salah satu unit kegiatan mahasiswa yang menjadi wadah bagi mahasiswa Universitas Gadjah Mada yang ingin mengembangkan potensi diri dalam bidang seni tari, karawitan, dan pedhalangan.","Rossi Firmansyah","assets/communities/leaders/1.png","Dia adalah ketua UKJGS UGM (Unit Kesenian Jawa Gaya Surakarta Universitas Gadjah Mada) yang berdedikasi tinggi dalam melestarikan dan memperkenalkan budaya Yogyakarta. Dengan pengalaman bertahun-tahun dalam seni tradisional, Rossi memimpin komunitas ini dengan semangat dan visi yang kuat untuk menginspirasi generasi muda agar mencintai dan menjaga warisan dan budaya.");
+
+CREATE TABLE communities_activity (
+    id INT NOT NULL AUTO_INCREMENT,
+    community_id INT NOT NULL,
+    activity_name VARCHAR(255),
+    activity_img VARCHAR(255),
+    activity_description TEXT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (community_id) REFERENCES communities(id)
+);
+
+INSERT INTO communities_activity (community_id, activity_name, activity_img, activity_description)
+VALUES
+(1,"Pementasan","assets/communities/activities/1.png","Pementasan skala besar yang diadakan berkala setiap tahunnya, dalam satu periode terdapat 3 pentas utama yaitu Gladhi Madya, Ramayana Prambanan dan Ambal Warsa"),
+(1,"Pelatihan","assets/communities/activities/2.png","Pelatihan rutin sebanyak dua kali seminggu untuk divisi tari dan karawitan pedhalangan (tari setiap selasa dan kamis dan karawitan pedhalangan setiap senin dan rabu)"),
+(1,"Workshop","assets/communities/activities/3.png","Kegiatan pelatihan khusus yang diselenggarakan untuk meningkatkan pengetahuan dan keterampilan anggota UKM");
+
+CREATE TABLE communities_performance_gallery (
+    id INT NOT NULL AUTO_INCREMENT,
+    community_id INT NOT NULL,
+    img_url VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (community_id) REFERENCES communities(id)
+);
+
+INSERT INTO communities_performance_gallery (community_id, img_url)
+VALUES
+(1,"assets/communities/gallery/performance/1.png"),
+(1,"assets/communities/gallery/performance/2.jpg");
+
+CREATE TABLE communities_behind_gallery (
+    id INT NOT NULL AUTO_INCREMENT,
+    community_id INT NOT NULL,
+    img_url VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (community_id) REFERENCES communities(id)
+);
+
+INSERT INTO communities_behind_gallery (community_id, img_url)
+VALUES
+(1,"assets/communities/gallery/behind_the_scene/1.png"),
+(1,"assets/communities/gallery/behind_the_scene/2.jpg"),
+(1,"assets/communities/gallery/behind_the_scene/3.jpg");
