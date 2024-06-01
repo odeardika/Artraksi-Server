@@ -68,7 +68,6 @@ export const getCommunityDetailsData = async (req : Request, res : Response) => 
         // get community performance gallery
         const performanceGallery = await getCommunityPerformanceGallery(communityId) as any as CommunityGallery[];
         communityDetails.performanceGallery = performanceGallery;
-        console.log(performanceGallery);
 
         res.status(200).json(communityDetails);
     }catch(error){

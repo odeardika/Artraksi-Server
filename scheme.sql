@@ -123,8 +123,7 @@ CREATE TABLE communities_detail (
     leader_img VARCHAR(255),
     leader_desc TEXT,
     PRIMARY KEY (id),
-    FOREIGN KEY (community_id) REFERENCES communities(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)  
+    FOREIGN KEY (community_id) REFERENCES communities(id)
 );
 
 INSERT INTO communities_detail (community_id, comunity_detail, leader_name, leader_img, leader_desc)
