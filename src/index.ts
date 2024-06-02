@@ -1,7 +1,7 @@
 import express ,{ Request, Response } from "express";
-import { router as authRoute} from "./routes/auth";
-import { router as articlesRoute} from "./routes/articles";
-import { router as communitiesRoute} from "./routes/communities";
+import { router as authRoute} from "../src/routes/auth";
+import { router as articlesRoute} from "../src/routes/articles";
+import { router as communitiesRoute} from "../src/routes/communities";
 import path from "path";
 import cors from "cors";
 
