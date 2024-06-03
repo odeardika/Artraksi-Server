@@ -1,4 +1,3 @@
-import { get } from "http";
 import { pool as mysqlPool } from "./connector";
 
 export type Article = {
@@ -37,3 +36,7 @@ export const getArticleContentPreview = async (article_id : number) => {
     return article[0];
 };
 
+export const searchArticles = async (search : string) => {
+    const [articles] = await mysqlPool.query(`SELECT * FROM articles WHERE title REGEXP "${search}"`);
+    return articles;
+}

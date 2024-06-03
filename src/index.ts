@@ -6,7 +6,7 @@ import path from "path";
 import cors from "cors";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../public')));
@@ -16,7 +16,7 @@ app.use(articlesRoute);
 app.use(communitiesRoute);
 
 app.get("/", (req : Request, res : Response) => {
-    res.send(`Artraksi server is running`);
+    res.send(`<h1>Artraksi server is running</h1>`);
 });
 
 app.listen(port, () => {
