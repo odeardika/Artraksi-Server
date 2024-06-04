@@ -12,6 +12,15 @@ export type Article = {
     
 };
 
+export type ArticleContents = {
+    id: number,
+    text_order: number,
+    text: string,
+    text_type: 'paragraph' | 'heading',
+    article_id: number,
+};
+
+
 export const getAllArticles = async () => {
     const [articles] = await mysqlPool.query("SELECT * FROM articles");
     return articles;
@@ -38,5 +47,10 @@ export const getArticleContentPreview = async (article_id : number) => {
 
 export const searchArticles = async (search : string) => {
     const [articles] = await mysqlPool.query(`SELECT * FROM articles WHERE title REGEXP "${search}"`);
+    return articles;
+}
+
+export const getNewestArticles = async () => {
+    const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY upload_date DESC") as Article[] | any[];
     return articles;
 }
