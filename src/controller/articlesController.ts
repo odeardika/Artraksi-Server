@@ -4,7 +4,8 @@ import {
     getTopSixArticles, 
     Article,
     searchArticles as searchArticlesDB,
-    getNewestArticles as getNewestArticlesDB 
+    getNewestArticles as getNewestArticlesDB,
+    getMostLikedArticle as getMostLikedArticleDB
 } from '../utils/database/articles';
 import { formatDate } from '../utils/changeDateFormat';
 import { getUserById, User } from '../utils/database/users';
@@ -93,4 +94,47 @@ export const getNewestArticles = async (req : Request, res : Response) => {
         console.log(error);
     }
 
+}
+
+export const getMostLikedArticle = async (req : Request, res : Response) => {
+    try{
+        const [article] = await getMostLikedArticleDB();
+        const preview = await getArticleContentPreview(article.id);
+        res.status(200).json({
+            ...article,
+            preview : preview.text
+        });
+    }catch(error){
+        res.status(500).json({message : "failed to get article"});
+    }
+}
+
+export const getNewestArticlesWithLimit = async (req : Request, res : Response) => {
+    try {
+        const limit = parseInt(req.params.limit);
+
+        const rawArticles = await getNewestArticlesDB(limit);
+        const articles : Article[] = [];
+        for (const article of rawArticles) {
+            const preview : any = await getArticleContentPreview(article.id);
+            if(preview === undefined){
+                article.preview = "";
+            }else{
+                article.preview = preview.text;
+            }
+
+            const date = new Date(article.upload_date);
+            article.upload_date = formatDate(date, false);
+            
+
+            const user = await getUserById(article.creator_id) as User;
+            article.creator_name = user.username;
+            article.creator_profile = user.profile_img;
+            
+            articles.push(article);
+        }
+        res.status(200).json(articles);
+    } catch (error) {
+        console.log(error);
+    }
 }

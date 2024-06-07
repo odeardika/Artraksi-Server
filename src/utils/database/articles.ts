@@ -20,6 +20,16 @@ export type ArticleContents = {
     article_id: number,
 };
 
+export type ArticleData = {
+    id: number,
+    title: string,
+    thumbnail_img: string,
+    creator_id: number,
+    upload_date: string,
+    likes: number,
+    views: number,
+};
+
 
 export const getAllArticles = async () => {
     const [articles] = await mysqlPool.query("SELECT * FROM articles");
@@ -41,7 +51,7 @@ export const likeArticle = async (id : number) => {
 }
 
 export const getArticleContentPreview = async (article_id : number) => {
-    const [article] : any = await mysqlPool.query("SELECT text FROM articles_contents WHERE article_id=? AND text_order = 0", [article_id]);
+    const [article] = await mysqlPool.query("SELECT text FROM articles_contents WHERE article_id=? AND text_order = 0", [article_id]) as any[] as ArticleContents[][];
     return article[0];
 };
 
@@ -50,7 +60,16 @@ export const searchArticles = async (search : string) => {
     return articles;
 }
 
-export const getNewestArticles = async () => {
+export const getNewestArticles = async (limit? : number) => {
+    if(limit){
+        const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY upload_date DESC LIMIT ?", [limit]) as Article[] | any[];
+        return articles;
+    }
     const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY upload_date DESC") as Article[] | any[];
     return articles;
+}
+
+export const getMostLikedArticle = async () => {
+    const [article] = await mysqlPool.query("SELECT * FROM articles ORDER BY likes DESC LIMIT 1") as any as ArticleData[][];
+    return article;
 }
