@@ -5,7 +5,8 @@ import {
     handleSearchPage, 
     getNewestArticles,
     getNewestArticlesWithLimit,
-    getMostLikedArticle
+    getMostLikedArticle,
+    getTrendingArticles
 } from "../controller/articlesController";
 
 export const router = Router();
@@ -21,3 +22,5 @@ router.get("/articles/new", getNewestArticles);
 router.get("/articles/new/:limit", getNewestArticlesWithLimit);
 
 router.get("/articles/most-liked", getMostLikedArticle);
+
+router.get("/articles/trending", getTrendingArticles);

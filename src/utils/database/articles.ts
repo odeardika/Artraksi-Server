@@ -73,3 +73,8 @@ export const getMostLikedArticle = async () => {
     const [article] = await mysqlPool.query("SELECT * FROM articles ORDER BY likes DESC LIMIT 1") as any as ArticleData[][];
     return article;
 }
+
+export const getTrendingArticles = async () => {
+    const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY views DESC LIMIT 6") as Article[] | any[];
+    return articles;
+}
