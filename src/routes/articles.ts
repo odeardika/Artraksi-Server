@@ -8,7 +8,8 @@ import {
     getMostLikedArticle,
     getTrendingArticles,
     getArticleContents,
-    getArticleById
+    getArticleById,
+    getRecomendedArticles
 } from "../controller/articlesController";
 
 export const router = Router();
@@ -30,3 +31,5 @@ router.get("/articles/trending", getTrendingArticles);
 router.get("/articles/contents/:id", getArticleContents);
 
 router.get("/articles/:id", getArticleById);
+
+router.get("/articles/recomendation/:id", getRecomendedArticles);

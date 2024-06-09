@@ -2,7 +2,6 @@ import { Request, response, Response } from 'express';
 import { 
     getArticleContentPreview, 
     getTopSixArticles, 
-    Article,
     searchArticles as searchArticlesDB,
     getNewestArticles as getNewestArticlesDB,
     getMostLikedArticle as getMostLikedArticleDB,
@@ -12,6 +11,19 @@ import {
 } from '../utils/database/articles';
 import { formatDate } from '../utils/changeDateFormat';
 import { getUserById, User } from '../utils/database/users';
+
+export type Article = {
+    id : number,
+    title : string,
+    upload_date : string,
+    likes : number,
+    views : number,
+    creator_id : number,
+    preview : string,
+    creator_name : string,
+    creator_profile : string,
+    thumbnail_img : string
+}
 
 
 export const getTopArticles =  async (req : Request, res : Response) => {
@@ -190,4 +202,38 @@ export const getArticleById = async (req : Request, res : Response) => {
         console.error(error);
         throw new Error("failed to get article");
     }
+}
+
+export const getRecomendedArticles = async (req : Request, res : Response) => {
+    try{
+        const article_id = parseInt(req.params.id);
+        const rawArticles = await getNewestArticlesDB();
+        const articles : Article[] = [];
+        let i = 0;
+        while(articles.length < 6){
+            const temp = rawArticles[i];
+            if(temp === undefined){
+                break;
+            }
+            if(temp.id === article_id){
+                i++;
+                continue;
+            }
+            const preview = await getArticleContentPreview(temp.id);
+            temp.preview = preview.text;
+            const date = new Date(temp.upload_date);
+            temp.upload_date = formatDate(date);
+            const user = await getUserById(temp.creator_id) as User;
+            temp.creator_name = user.username;
+            temp.creator_profile = user.profile_img;
+            articles.push(temp);
+            i++;
+        }
+
+        res.status(200).json(articles);
+    }catch(error : any){
+        console.error(error);
+        res.status(500).json({message : "failed to get articles"});
+    }  
+
 }
