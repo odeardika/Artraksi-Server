@@ -12,6 +12,18 @@ export type Article = {
     
 };
 
+export type ArticleOnly = {
+    id: number,
+    title: string,
+    thumbnail_img: string,
+    creator_id: number,
+    upload_date: string,
+    likes: number,
+    creator_name: string,
+    creator_profile: string,
+
+
+}
 export type ArticleContents = {
     id: number,
     text_order: number,
@@ -29,6 +41,7 @@ export type ArticleData = {
     likes: number,
     views: number,
 };
+
 
 
 export const getAllArticles = async () => {
@@ -77,4 +90,14 @@ export const getMostLikedArticle = async () => {
 export const getTrendingArticles = async () => {
     const [articles] = await mysqlPool.query("SELECT * FROM articles ORDER BY views DESC LIMIT 6") as Article[] | any[];
     return articles;
+}
+
+export const getArticleContents = async (article_id : number) => {
+    const [contents] = await mysqlPool.query("SELECT * FROM articles_contents WHERE article_id = ? ORDER BY text_order", [article_id]) as any as ArticleContents[][];
+    return contents;
+}
+
+export const getArticleById = async (id: number) => {
+    const [article] = await mysqlPool.query("SELECT * FROM articles WHERE id = ?", [id]) as any as ArticleOnly[][];
+    return article;
 }

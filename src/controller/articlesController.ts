@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import { 
     getArticleContentPreview, 
     getTopSixArticles, 
@@ -6,7 +6,9 @@ import {
     searchArticles as searchArticlesDB,
     getNewestArticles as getNewestArticlesDB,
     getMostLikedArticle as getMostLikedArticleDB,
-    getTrendingArticles as getTrendingArticlesDB
+    getTrendingArticles as getTrendingArticlesDB,
+    getArticleContents as getArticleContentsDB,
+    getArticleById as getArticleByIdDB
 } from '../utils/database/articles';
 import { formatDate } from '../utils/changeDateFormat';
 import { getUserById, User } from '../utils/database/users';
@@ -160,5 +162,32 @@ export const getTrendingArticles = async (req : Request, res : Response) => {
         res.status(200).json(articles);
     }catch(error){
         res.status(500).json({message : "failed to get top articles"});
+    }
+}
+
+export const getArticleContents = async (req : Request, res : Response) => {
+    try{
+        const article_id = parseInt(req.params.id);
+        const rawContents = await getArticleContentsDB(article_id);
+        res.status(200).json(rawContents);
+    }catch(error){
+        console.error(error);
+        res.status(500).json({message : "failed to get article contents"});
+    }
+}
+
+export const getArticleById = async (req : Request, res : Response) => {
+    try{
+        const id = parseInt(req.params.id);
+        const [article] = await getArticleByIdDB(id);
+        const user = await getUserById(article.creator_id);
+        res.status(200).json({
+            ...article,
+            creator_name : user.username,
+            creator_profile : user.profile_img
+        });
+    }catch(error : any){
+        console.error(error);
+        throw new Error("failed to get article");
     }
 }
