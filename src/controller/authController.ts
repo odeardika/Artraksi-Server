@@ -16,9 +16,9 @@ export const regisAuth = async (req : Request<{},{},RegisBody>, res : Response) 
 }
 
 export const loginAuth = async (req : Request<{},{},LoginBody>, res : Response) => {
-    const {identfire, password} = req.body;
+    const {identifire, password} = req.body;
 
-    loginUser(identfire, password)
+    loginUser(identifire, password)
     .then(data => res.status(200).send(data))
     .catch((error : TypeError) => res.status(400).json({
         ok : false,

@@ -2,14 +2,14 @@ import { getUser, User } from "../database/users";
 import bcrypt from "bcrypt";
 import { validate } from "email-validator";
 
-export const loginUser = async (identfire : string, password : string) => {
+export const loginUser = async (identifire : string, password : string) => {
 
     let user : User; 
 
-    // if the identfire is email
-    if(validate(identfire)){
+    // if the identifire is email
+    if(validate(identifire)){
         try {
-            user = await getUser(identfire, 'email');
+            user = await getUser(identifire, 'email');
             if(!user) throw new Error("Email not found");
             
             const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -30,7 +30,7 @@ export const loginUser = async (identfire : string, password : string) => {
     }
 
     try{
-        user = await getUser(identfire, 'username');
+        user = await getUser(identifire, 'username');
         if(!user) throw new Error("Username not found");
         
         const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -51,6 +51,6 @@ export const loginUser = async (identfire : string, password : string) => {
 }
 
 export type LoginBody = {
-    identfire : string,
+    identifire : string,
     password : string
 }
