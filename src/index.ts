@@ -2,6 +2,7 @@ import express ,{ Request, Response } from "express";
 import { router as authRoute} from "../src/routes/auth";
 import { router as articlesRoute} from "../src/routes/articles";
 import { router as communitiesRoute} from "../src/routes/communities";
+import { router as eventsRoute } from "./routes/events";
 import path from "path";
 import cors from "cors";
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(authRoute);
 app.use(articlesRoute);
 app.use(communitiesRoute);
+app.use(eventsRoute);
 
 app.get("/", (req : Request, res : Response) => {
     res.send(`<h1>Artraksi server is running</h1>`);
