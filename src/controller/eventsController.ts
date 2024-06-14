@@ -1,9 +1,12 @@
 import {
     getUpcomingEvents as getUpcomingEventsDB,
+    getEventById,
+    getEventGallery,
+    getEventSchedule,
     Event
 } from "../utils/database/events";
 import { Request, Response } from "express";
-import { formatDateAndTime } from "../utils/changeDateFormat";
+import { formatDate, formatDateAndTime } from "../utils/changeDateFormat";
 
 
 export const getUpcomingEvents = async (req : Request, res : Response) => {
@@ -34,6 +37,29 @@ export const getAllEvents = async (req : Request, res : Response) => {
         }
         res.status(200).json(events);
     }catch(error){
+        console.error(error);
+        res.status(500).json({message : "failed to get events"});
+    }
+}
+
+export const getEventDetail = async (req : Request, res : Response) => {
+    try{
+        const id = parseInt(req.params.id);
+        const [rawEvent] = await getEventById(id) as any as Event[];
+        const date = new Date(rawEvent.event_date);
+        rawEvent.event_date = formatDate(date,false);
+
+        const gallery = await getEventGallery(id);
+
+        const schedule = await getEventSchedule(id);
+
+        res.status(200).json({
+            event : rawEvent,
+            gallery : gallery,
+            schedule : schedule
+        });
+    }catch(error : any){
+
         console.error(error);
         res.status(500).json({message : "failed to get events"});
     }
