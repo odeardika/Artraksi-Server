@@ -172,3 +172,96 @@ VALUES
 (1,"assets/communities/gallery/behind_the_scene/1.png"),
 (1,"assets/communities/gallery/behind_the_scene/2.jpg"),
 (1,"assets/communities/gallery/behind_the_scene/3.jpg");
+
+CREATE TABLE events (
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255),
+    event_date DATETIME,
+    event_description TEXT,
+    event_location VARCHAR(255),
+    event_location_detail VARCHAR(255),
+    event_thumbnail VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO events (title, event_date, event_description, event_location, event_location_detail, event_thumbnail)
+VALUES
+("Gladhi Madya 2024", "2024-7-6 19:00:00", "Dalam acara Gladhi Madya disajikan beberapa tarian yaitu Tari Putri Gambyong Pareanom, Tari Putri Golek Manis, Tari Putri Dombanini dan Tari Putra Gunung Sari yang dikemas dalam bentuk repertoar drama. Dalam acara Gladhi Madya disajikan beberapa tarian yaitu Tari Putri Gambyong Pareanom, Tari Putri Golek Manis, Tari Putri Dombanini dan Tari Putra Gunung Sari yang dikemas dalam bentuk repertoar drama.", "DIY", "Pendapa Taman Siswa", "assets/events/thumbnail/1.png"),
+("Pertunjukan Wayang Kulit oleh Ki Dalang Cermo Taksoko", "2024-7-22 19:00:00", "Kisah epik Mahabharata kembali hadir dalam pertunjukan wayang kulit yang memukau oleh Ki Dalang Cermo Taksoko. Kali ini, pertunjukan akan mengangkat kisah Pandawa Lima dalam pencarian mereka untuk mendapatkan pusaka-pusaka dewa.", "Yogyakarta", "Pendopo Agung Keraton", "assets/events/thumbnail/2.png"),
+("Pertunjukan Uyon-Uyon dan Tari Tradisional oleh Paguyuban Puspito Laras","2024-7-24 19:00:00", "Paguyuban Puspito Laras kembali menghadirkan pertunjukan seni Uyon-Uyon dan Tari Tradisional Nusantara yang memukau. Uyon-Uyon, seni tradisional Jawa Timur yang memadukan musik, tari, dan lawak, akan dibawakan dengan penuh semangat dan humor oleh para penari dan pemain musik Paguyuban Puspito Laras.", "Yogyakarta", "Aula Gedung Kesenian", "assets/events/thumbnail/3.png"),
+("Pertunjukan Wayang Golek oleh Ki. M.Ry. Cermo Kandhawijaya","2024-7-16 19:00:00","Ki. M.Ry. Cermo Kandhawijaya, dalang wayang golek ternama dari Jawa Tengah, akan kembali menghibur masyarakat Surabaya dengan pertunjukannya yang memukau. Kali ini, pertunjukan akan mengangkat kisah Setyo Wati, seorang putri cantik yang mencari cinta sejati.", "Kraton Yogyakarta", "Pendopo Agung", "assets/events/thumbnail/4.png"),
+("Fragmen Wayang Wong oleh Paguyuban Kesenian Suryo Kencono","2024-8-5 19:00:00", 'Fragmen Bedhah Alengka menceritakan kisah klimaks dalam pewayangan Jawa, yaitu pertempuran antara Rama dan pasukannya melawan Rahwana dan pasukan raksasa di Alengka. Pertunjukan ini akan menampilkan adegan-adegan penuh aksi dan heroik, seperti pertarungan antara Rama dan Rahwana, jatuhnya Kumbakarna, dan akhirnya terbebasnya Dewi Shinta dari cengkeraman Rahwana.', "Keraton Yogyakarta", "Bangsal Srimanganti", "assets/events/thumbnail/5.png");
+
+
+CREATE TABLE event_gallery (
+    id INT NOT NULL AUTO_INCREMENT,
+    event_id INT NOT NULL,
+    img_url VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+INSERT INTO event_gallery (event_id, img_url)
+VALUES
+(1,"assets/events/gallery/1.png"),
+(1,"assets/events/gallery/2.png"),
+(1,"assets/events/gallery/3.png"),  
+(1,"assets/events/gallery/4.png"),  
+(1,"assets/events/gallery/5.png"),  
+(1,"assets/events/gallery/6.png"),  
+(2,"assets/events/gallery/1.png"),
+(2,"assets/events/gallery/2.png"),
+(2,"assets/events/gallery/3.png"),  
+(2,"assets/events/gallery/4.png"),  
+(2,"assets/events/gallery/5.png"),  
+(2,"assets/events/gallery/6.png"), 
+(4,"assets/events/gallery/1.png"),
+(4,"assets/events/gallery/2.png"),
+(4,"assets/events/gallery/3.png"),  
+(4,"assets/events/gallery/4.png"),  
+(4,"assets/events/gallery/5.png"),  
+(4,"assets/events/gallery/6.png"), 
+(5,"assets/events/gallery/1.png"),
+(5,"assets/events/gallery/2.png"),
+(5,"assets/events/gallery/3.png"),  
+(5,"assets/events/gallery/4.png"),  
+(5,"assets/events/gallery/5.png"),  
+(5,"assets/events/gallery/6.png"), 
+(3,"assets/events/gallery/1.png"),
+(3,"assets/events/gallery/2.png"),
+(3,"assets/events/gallery/3.png"),  
+(3,"assets/events/gallery/4.png"),  
+(3,"assets/events/gallery/5.png"),  
+(3,"assets/events/gallery/6.png"); 
+
+
+CREATE TABLE event_schedules (
+    id INT NOT NULL AUTO_INCREMENT,
+    event_id INT NOT NULL,
+    event_detail VARCHAR(255),
+    time_start TIME,
+    time_end TIME,
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
+);
+
+INSERT INTO event_schedules (event_id, event_detail, time_start, time_end)
+VALUES
+(1,"Sambutan dan pengenalan pertunjukan", "19:00:00", "19:30:00"),
+(1,"Pertunjukan wayang kulit", "19:30:00", "21:30:00"),
+(1,"Pertunjukan penutup acara", "21:30:00", "22:00:00"),
+(2,"Sambutan dan pengenalan pertunjukan", "19:00:00", "19:30:00"),
+(2,"Pertunjukan wayang kulit", "19:30:00", "21:30:00"),
+(2,"Pertunjukan penutup acara", "21:30:00", "22:00:00"),
+(3,"Sambutan dan pengenalan pertunjukan", "19:00:00", "19:30:00"),
+(3,"Penampilan tari tradisional", "19:30:00", "20:00:00"),
+(3,'Pertunjukan Uyon-uyon oleh Paguyuban Puspito Laras', "20:00:00", "22:30:00"),
+(3,"Pertunjukan penutup acara", "22:30:00", "23:00:00"),
+(4,"Pembukaan acara oleh MC dan Sambutan dari panitia", "19:00:00", "19:30:00"),
+(4,"Penampilan tari tradisional", "19:30:00", "20:00:00"),
+(4,'Pertunjukan wayang golek "Semar Gugur" oleh Ki. M. Ry. Cermo Kandhawijaya', "20:00:00", "22:30:00"),
+(4,"Pertunjukan penutup acara", "22:30:00", "23:00:00"),
+(5,"Pembukaan acara oleh MC dan Sambutan dari panitia", "19:00:00", "19:30:00"),
+(5,"Penambilan tari pembukaan", "19:30:00", "20:00:00"),
+(5,'Pertunjukan Fragmen Wayang Wong "Bedhah Alengka" oleh Paguyuban Kesenian Suryo Kencono', "20:00:00", "22:30:00"),
+(5,"Pertunjukan penutup acara", "22:30:00", "23:00:00");
