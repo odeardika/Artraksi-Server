@@ -3,10 +3,12 @@ import {
     getEventById,
     getEventGallery,
     getEventSchedule,
-    Event
+    Event,
+    EventSchedule,
 } from "../utils/database/events";
 import { Request, Response } from "express";
 import { formatDate, formatDateAndTime } from "../utils/changeDateFormat";
+import { changeTimeFormat } from "../utils/changeTimeFormat";
 
 
 export const getUpcomingEvents = async (req : Request, res : Response) => {
@@ -51,7 +53,15 @@ export const getEventDetail = async (req : Request, res : Response) => {
 
         const gallery = await getEventGallery(id);
 
-        const schedule = await getEventSchedule(id);
+        const rawSchedule = await getEventSchedule(id) as any as EventSchedule[];
+
+        const schedule : any[] = [];
+        for(const raw of rawSchedule){  
+            raw.time_start = changeTimeFormat(raw.time_start, true, true, false);
+            raw.time_end = changeTimeFormat(raw.time_end, true, true, false);
+
+            schedule.push(raw);
+        }
 
         res.status(200).json({
             event : rawEvent,
@@ -64,3 +74,5 @@ export const getEventDetail = async (req : Request, res : Response) => {
         res.status(500).json({message : "failed to get events"});
     }
 }
+
+
