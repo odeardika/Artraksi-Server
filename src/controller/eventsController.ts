@@ -3,8 +3,12 @@ import {
     getEventById,
     getEventGallery,
     getEventSchedule,
+    addReminderIntoDatabase,
+    ReminderRequestBody,
+    checkReminders,
     Event,
     EventSchedule,
+    removeReminderIntoDatabase,
 } from "../utils/database/events";
 import { Request, Response } from "express";
 import { formatDate, formatDateAndTime } from "../utils/changeDateFormat";
@@ -72,6 +76,45 @@ export const getEventDetail = async (req : Request, res : Response) => {
 
         console.error(error);
         res.status(500).json({message : "failed to get events"});
+    }
+}
+
+export const addReminder = async (req : Request<{},{},ReminderRequestBody>, res : Response) => {
+    try{
+        const { event_id, user_id } = req.body;
+
+        const reminder = await addReminderIntoDatabase(event_id, user_id);
+
+        res.status(200).json(reminder);
+
+    }catch(error : any){
+        console.error(error);
+        res.status(500).json({message : "failed to add reminder"});        
+    }
+}
+
+export const removeReminder = async (req : Request, res : Response) => {
+    try {
+        const id = parseInt(req.params.id);
+        const result = await removeReminderIntoDatabase(id);
+        res.status(200).json({message : "Reminder removed successfully"});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message : "failed to remove reminder"});        
+    }
+}   
+
+export const checkEventReminder = async (req : Request<{},{},ReminderRequestBody>, res : Response) => {
+    try {
+        const { event_id, user_id } = req.body;
+        const result = await checkReminders(event_id, user_id);
+        res.status(200).json({
+            is_remainder : result.length > 0,
+            remaider_id : (result.length > 0)? result[0].id as number : null
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message : "failed to add reminder"});        
     }
 }
 

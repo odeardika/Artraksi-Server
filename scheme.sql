@@ -265,3 +265,13 @@ VALUES
 (5,"Penambilan tari pembukaan", "19:30:00", "20:00:00"),
 (5,'Pertunjukan Fragmen Wayang Wong "Bedhah Alengka" oleh Paguyuban Kesenian Suryo Kencono', "20:00:00", "22:30:00"),
 (5,"Pertunjukan penutup acara", "22:30:00", "23:00:00");
+
+CREATE TABLE reminder_lists (
+    id INT NOT NULL AUTO_INCREMENT,
+    event_id INT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
