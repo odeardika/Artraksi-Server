@@ -58,8 +58,8 @@ export const addReminderIntoDatabase = async (event_id : number, user_id : numbe
     return result;
 }
 
-export const removeReminderIntoDatabase = async (id : number) => {
-    const [result] = await mysqlPool.query("DELETE FROM reminder_lists WHERE id = ?", [id]) as any as number[];
+export const removeReminderIntoDatabase = async (event_id : number, user_id : number) => {
+    const [result] = await mysqlPool.query("DELETE FROM reminder_lists WHERE event_id = ? AND user_id = ?", [event_id, user_id]) as any as number[];
     return result;
 }
 

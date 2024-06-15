@@ -79,11 +79,12 @@ export const getEventDetail = async (req : Request, res : Response) => {
     }
 }
 
-export const addReminder = async (req : Request<{},{},ReminderRequestBody>, res : Response) => {
+export const addReminder = async (req : Response | any, res : Response) => {
     try{
-        const { event_id, user_id } = req.body;
+        const { event_id } = req.body;
+        const { id } = req.user;
 
-        const reminder = await addReminderIntoDatabase(event_id, user_id);
+        const reminder = await addReminderIntoDatabase(event_id, id);
 
         res.status(200).json(reminder);
 
@@ -93,10 +94,11 @@ export const addReminder = async (req : Request<{},{},ReminderRequestBody>, res 
     }
 }
 
-export const removeReminder = async (req : Request, res : Response) => {
+export const removeReminder = async (req : Request | any, res : Response) => {
     try {
-        const id = parseInt(req.params.id);
-        const result = await removeReminderIntoDatabase(id);
+        const event_id = parseInt(req.params.id);
+        const {id} = req.user;
+        const result = await removeReminderIntoDatabase(event_id, id);
         res.status(200).json({message : "Reminder removed successfully"});
     } catch (error) {
         console.error(error);
@@ -104,10 +106,11 @@ export const removeReminder = async (req : Request, res : Response) => {
     }
 }   
 
-export const checkEventReminder = async (req : Request<{},{},ReminderRequestBody>, res : Response) => {
+export const checkEventReminder = async (req : Request | any, res : Response) => {
     try {
-        const { event_id, user_id } = req.body;
-        const result = await checkReminders(event_id, user_id);
+        const event_id = parseInt(req.params.id);
+        const {id} = req.user;
+        const result = await checkReminders(event_id, id);
         res.status(200).json({
             is_remainder : result.length > 0,
             remaider_id : (result.length > 0)? result[0].id as number : null

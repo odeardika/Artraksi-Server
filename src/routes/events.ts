@@ -6,7 +6,9 @@ import {
     addReminder,
     removeReminder,
     checkEventReminder
- } from "../controller/eventsController";
+} from "../controller/eventsController";
+import { authToken } from "../middleware/validate.middleware";
+
 
 export const router = Router();
 
@@ -16,8 +18,8 @@ router.get("/events/upcoming", getAllEvents);
 
 router.get("/events/:id", getEventDetail);
 
-router.post("/events/reminder", addReminder);
+router.post("/events/reminder", authToken, addReminder);
 
-router.delete("/events/reminder/:id", removeReminder);
+router.delete("/events/reminder/:id", authToken, removeReminder);
 
-router.post("/events/reminder/check", checkEventReminder);
+router.get("/events/reminder/check/:id", authToken, checkEventReminder);
