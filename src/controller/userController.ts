@@ -3,6 +3,7 @@ import {
     getUserById, 
     getUserFavoritesArticles,
     getUserEventsRemaindersList,
+    updateUserProfilePicture
 } from "../utils/database/users";
 
 export const getProfileImage = async (req : Request | any, res : Response) => {
@@ -48,4 +49,14 @@ export const getUserProfileDetail = async (req : Request | any, res : Response) 
         console.log(`[Server-user-controller] ${error.message}`);
         res.status(500).json({message : "failed to get user"});
     }
+}
+
+export const updateUserProfile = async (req : Request | any, res : Response) => {
+    const file = req.file as any;
+    const newPicture = `assets/users/${file.filename}`;
+    const result = await updateUserProfilePicture(req.user.id, newPicture);
+
+    res.status(200).json(
+        {message : "Profile picture updated"}
+    );
 }
