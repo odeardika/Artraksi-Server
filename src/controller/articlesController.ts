@@ -7,7 +7,10 @@ import {
     getMostLikedArticle as getMostLikedArticleDB,
     getTrendingArticles as getTrendingArticlesDB,
     getArticleContents as getArticleContentsDB,
-    getArticleById as getArticleByIdDB
+    getArticleById as getArticleByIdDB,
+    checkArticleFavorite as checkArticleFavoriteDB,
+    likeArticle as likeArticleDB,
+    removeFavoriteArticle as unLikeArticleDB
 } from '../utils/database/articles';
 import { formatDate } from '../utils/changeDateFormat';
 import { getUserById, User } from '../utils/database/users';
@@ -44,14 +47,15 @@ export const getTopArticles =  async (req : Request, res : Response) => {
             articles.push(article);
         }
         res.status(200).json(articles);
-    }catch(error){
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get top articles"});
     }
 }
 
 export const searchArticles = async (req : Request, res : Response) => {
     try{
-        const keyword = req.params.keyword as string
+        const keyword = req.query.search as string;
         const rawArticles = await searchArticlesDB(keyword) as any[];
         const articles : Article[] = [];
         for (const article of rawArticles){
@@ -69,15 +73,20 @@ export const searchArticles = async (req : Request, res : Response) => {
         }
 
         res.status(200).json(articles);
-    }catch(error){
-    
+    }catch(error : any){
+        if(error.message == "Illegal argument to a regular expression."){
+            return;
+        }else{
+            console.log(`[Server-article-controller]: ${error.message}`);
+        }
     }
 }
 
 export const handleSearchPage = async (req : Request, res : Response) => {
     try{
         res.status(200).send("<h1>Search Article Routes</h1>");
-    }catch(error){
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get article"});
     }
 }
@@ -105,8 +114,9 @@ export const getNewestArticles = async (req : Request, res : Response) => {
             articles.push(article);
         }
         res.status(200).json(articles);
-    } catch (error) {
-        console.log(error);
+    } catch (error : any) {
+        console.log(`[Server-article-controller]: ${error.message}`);
+        res.status(500).json({message : "failed to get article"});
     }
 
 }
@@ -119,7 +129,8 @@ export const getMostLikedArticle = async (req : Request, res : Response) => {
             ...article,
             preview : preview.text
         });
-    }catch(error){
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get article"});
     }
 }
@@ -172,7 +183,8 @@ export const getTrendingArticles = async (req : Request, res : Response) => {
             articles.push(article);
         }
         res.status(200).json(articles);
-    }catch(error){
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get top articles"});
     }
 }
@@ -182,8 +194,8 @@ export const getArticleContents = async (req : Request, res : Response) => {
         const article_id = parseInt(req.params.id);
         const rawContents = await getArticleContentsDB(article_id);
         res.status(200).json(rawContents);
-    }catch(error){
-        console.error(error);
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get article contents"});
     }
 }
@@ -199,8 +211,8 @@ export const getArticleById = async (req : Request, res : Response) => {
             creator_profile : user.profile_img
         });
     }catch(error : any){
-        console.error(error);
-        throw new Error("failed to get article");
+        console.log(`[Server-article-controller]: ${error.message}`);
+        res.status(500).json({message : "failed to get article"});
     }
 }
 
@@ -232,8 +244,53 @@ export const getRecomendedArticles = async (req : Request, res : Response) => {
 
         res.status(200).json(articles);
     }catch(error : any){
-        console.error(error);
+        console.log(`[Server-article-controller]: ${error.message}`);
         res.status(500).json({message : "failed to get articles"});
     }  
+}
 
+export const checkArticleFavorite = async (req : Request | any, res : Response) => {
+    try{
+        const article_id = parseInt(req.params.id);
+        const { id } = req.user;
+        const result = await checkArticleFavoriteDB(article_id, id) as any;
+        res.status(200).json({
+            is_favorite : result.length > 0
+        })
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
+        res.status(500).json({message : "failed to check article favorite"});
+    }
+}
+
+export const likeArticle = async (req : Request | any, res : Response) => {
+    try{
+        const article_id = req.body.article_id;
+        const { id } = req.user;
+
+        const result = await likeArticleDB(article_id, id);
+
+        res.status(200).json({
+            message : "Favorite added"
+        });
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
+        res.status(500).json({message : "failed to like article"});
+    }
+}
+
+export const unLikeArticle = async (req : Request | any, res : Response) => {
+    try{
+        const article_id = parseInt(req.params.id);
+        const { id } = req.user;
+
+        const result = await unLikeArticleDB(article_id, id);
+
+        res.status(200).json({
+            message : "Favorite removed"
+        });
+    }catch(error : any){
+        console.log(`[Server-article-controller]: ${error.message}`);
+        res.status(500).json({message : "failed to unlike article"});
+    }
 }
