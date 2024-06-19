@@ -14,9 +14,19 @@ export const getUser = async (identfire : string, key : string) => {
 };
 
 export const getUserById = async (user_id : number) => {
-    const [user] : any = await mysqlPool.query(`SELECT * FROM users WHERE id = ?`, [user_id]);
-    return user[0];
+    const [user] = await mysqlPool.query(`SELECT * FROM users WHERE id = ?`, [user_id]) as any[];
+    return user;
 };
+
+export const getUserFavoritesArticles = async (user_id : number) => {
+    const articles = await mysqlPool.query(`SELECT * FROM article_favorite_list WHERE user_id = ?`, [user_id]) as any[];
+    return articles;
+}
+
+export const getUserEventsRemaindersList = async (user_id : number) => {
+    const events = await mysqlPool.query(`SELECT * FROM reminder_lists WHERE user_id = ?`, [user_id]) as any[];
+    return events;
+}
 
 
 export type User = {

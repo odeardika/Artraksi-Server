@@ -204,7 +204,7 @@ export const getArticleById = async (req : Request, res : Response) => {
     try{
         const id = parseInt(req.params.id);
         const [article] = await getArticleByIdDB(id);
-        const user = await getUserById(article.creator_id);
+        const [user] = await getUserById(article.creator_id);
         res.status(200).json({
             ...article,
             creator_name : user.username,
