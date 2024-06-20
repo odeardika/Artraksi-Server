@@ -19,7 +19,10 @@ VALUES
 INSERT INTO users (id, username, email, password, profile_img)
 VALUES 
 (2,'user', 'user@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/default.png'),
-(3,'Nicholas Sullivan', 'nicholas.sullivan@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/3.png');
+(3,'Nicholas Sullivan', 'nicholas.sullivan@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/3.jpg'),
+(4,'Harold Gomez', 'harold.gomez@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/4.png'),
+(5,'Raymond White', 'raymond.white@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/5.png'),
+(6,'Ken Larson', 'ken.larson@gmail.com', '$2b$10$GWzxe91uLp2U7xEhVnpTfusaJgQFp5xTRo6MQBOkxmJ2gcxRIeG6y', 'assets/users/6.png');
 
 CREATE TABLE articles (
     id INT NOT NULL AUTO_INCREMENT,
@@ -59,11 +62,35 @@ CREATE TABLE blogs (
 INSERT INTO blogs (title, thumbnail_img, creator_id)
 VALUES 
 ('Pengalaman Memukau di Pameran Seni "Manifestasi Kreativitas" di Galeri Seni Murni Yogyakarta', 'assets/blogs/1.png', 3),
-('Menyaksikan Keajaiban Seni di Pertunjukan Wayang Kulit "Serat Menak" di Pendopo Keraton Yogyakarta', 'assets/blogs/2.png', 3),
-('Menyelami Keindahan Musik Gamelan di Konser "Melodi Budaya" di Pendopo Desa Kasongan, Yogyakarta', 'assets/blogs/3.png', 3),
-('Menyaksikan Keajaiban Pertunjukan Teater Tradisional "Legenda Rama Shinta" di Taman Budaya Yogyakarta', 'assets/blogs/4.png', 3),
-('Pengalaman Magis di Pentas Tari Klasik Jawa "Srimpi Pandhelori" di Keraton Yogyakarta', 'assets/blogs/5.png', 3),
+('Menyaksikan Keajaiban Seni di Pertunjukan Wayang Kulit "Serat Menak" di Pendopo Keraton Yogyakarta', 'assets/blogs/2.png', 4),
+('Menyelami Keindahan Musik Gamelan di Konser "Melodi Budaya" di Pendopo Desa Kasongan, Yogyakarta', 'assets/blogs/3.png', 5),
+('Menyaksikan Keajaiban Pertunjukan Teater Tradisional "Legenda Rama Shinta" di Taman Budaya Yogyakarta', 'assets/blogs/4.png', 6),
+('Pengalaman Magis di Pentas Tari Klasik Jawa "Srimpi Pandhelori" di Keraton Yogyakarta', 'assets/blogs/5.png', 4),
 ('Pengalaman Menonton Pertunjukan Wayang Kulit di Yogyakarta', 'assets/blogs/6.png', 3);
+
+CREATE TABLE blog_contents (
+    id INT NOT NULL AUTO_INCREMENT,
+    text_order INT NOT NULL,
+    text TEXT,
+    text_type ENUM('paragraph','heading'),
+    blog_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (blog_id) REFERENCES blogs(id)
+);
+
+INSERT INTO blog_contents (text_order, text, text_type, blog_id)
+VALUES
+(0, 'Hari ini saya memiliki kesempatan luar biasa untuk mengunjungi pameran seni yang menginspirasi di Galeri Seni Murni Yogyakarta. Acara ini, yang diberi nama "Manifestasi Kreativitas," menampilkan karya-karya seniman lokal yang begitu memukau dan menginspirasi.', "paragraph", 1),
+(1, 'Saat saya tiba di galeri, saya segera disambut oleh atmosfer yang penuh dengan energi kreatif. Ruangan yang dihiasi dengan indah memamerkan berbagai karya seni, mulai dari lukisan yang memikat hingga instalasi seni yang unik.', "paragraph", 1),
+(2, 'Salah satu karya yang benar-benar mencuri perhatian saya adalah lukisan abstrak berjudul "Perjalanan Jiwa" karya seniman lokal, Andi Susanto. Lukisan ini memukau saya dengan penggunaan warna yang hidup dan gerakan yang dinamis, serta berhasil menyampaikan pesan yang mendalam tentang perjalanan spiritual manusia.
+Selain itu, saya juga terpesona dengan karya patung yang dipamerkan di galeri. Patung-patung tersebut menampilkan keahlian dan imajinasi yang luar biasa dari seniman-seniman lokal, dan saya sangat terkesan dengan detail-detail halus yang terukir di setiap patung.', "paragraph", 1),
+(3,'Selama saya menjelajahi pameran, saya juga berkesempatan untuk bertemu dan berbicara dengan beberapa seniman yang memamerkan karya mereka. Mendengarkan cerita mereka tentang inspirasi dan proses kreatif mereka sangat menginspirasi saya, dan saya merasa beruntung bisa berbagi momen tersebut dengan mereka.
+Secara keseluruhan, pengalaman saya di pameran seni "Manifestasi Kreativitas" ini sungguh memukau dan menginspirasi. Saya merasa terhubung dengan keindahan dan kekayaan budaya Yogyakarta melalui karya-karya seni yang dipamerkan, dan saya sangat berharap bisa kembali untuk mengalami momen yang luar biasa ini lagi di masa mendatang.', "paragraph", 1),
+(0,'Saya baru saja kembali dari sebuah petualangan budaya yang mengagumkan di Yogyakarta, di mana saya menyaksikan salah satu pertunjukan seni paling ikonik, yaitu pertunjukan wayang kulit "Serat Menak" di Pendopo Keraton Yogyakarta. Pengalaman ini tidak hanya mempesona, tetapi juga memberikan wawasan mendalam tentang warisan budaya yang kaya di Jawa.', 'paragraph', 2),
+(0,'Saya baru saja kembali dari pengalaman yang memukau di sebuah konser musik gamelan di Pendopo Desa Kasongan, Yogyakarta. Konser ini bukan hanya tentang mendengarkan musik, tetapi juga tentang menjelajahi kekayaan budaya Jawa yang luar biasa.', 'paragraph', 3),
+(0,'Saya baru saja kembali dari sebuah pengalaman seni yang luar biasa di Yogyakarta, di mana saya menyaksikan sebuah pertunjukan teater tradisional yang memukau di Taman Budaya. Pengalaman ini tidak hanya memberikan hiburan yang mempesona, tetapi juga mengangkat keindahan dan kekayaan budaya Jawa.', 'paragraph', 4),
+(0,'Baru-baru ini, saya memiliki kesempatan luar biasa untuk menyaksikan pentas tari klasik Jawa "Srimpi Pandhelori" di Keraton Yogyakarta. Pengalaman ini membawa saya menyelami keindahan budaya tradisional yang penuh dengan nilai-nilai luhur dan keanggunan.', 'paragraph', 5),
+(0,'Halo pembaca setia! Kali ini saya ingin berbagi pengalaman yang tak terlupakan saat menonton pertunjukan wayang kulit di Yogyakarta. Sebagai penggemar budaya Jawa, kesempatan ini adalah mimpi yang menjadi kenyataan.', 'paragraph', 6);
 
 CREATE TABLE articles_contents (
     id INT NOT NULL AUTO_INCREMENT,
