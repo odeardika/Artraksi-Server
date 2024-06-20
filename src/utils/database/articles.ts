@@ -1,4 +1,3 @@
-import exp from "constants";
 import { pool as mysqlPool } from "./connector";
 
 export type Article = {
