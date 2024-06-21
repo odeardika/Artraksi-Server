@@ -9,6 +9,7 @@ node_modules
 
 # upload
 /public/assets/blogs/
+/public/assets/user/
 
 # misc
 .DS_Store

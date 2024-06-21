@@ -1,4 +1,3 @@
-import { title } from "process";
 import { pool as mysqlPool } from "./connector";
 
 export const getTrendingBlog = async (limit: number) => {
@@ -17,7 +16,7 @@ export const getNewestBlog = async (limit: number) => {
 }
 
 export const getAllNewestBlog = async () => {
-    const [blogs] = await mysqlPool.query("SELECT * FROM blogs");
+    const [blogs] = await mysqlPool.query("SELECT * FROM blogs ORDER BY upload_date DESC");
     return blogs;
 }
 
@@ -38,5 +37,48 @@ export const createBlog = async (title: any, thumbnail_img: any, creator_id: any
 
 export const addContentBlog = async (text_order : number, text : string, text_type : string, blog_id : number) => {
     const [result] = await mysqlPool.query("INSERT INTO blog_contents (text_order, text, text_type, blog_id) VALUES (?, ?, ?, ?)", [text_order, text, text_type, blog_id]);
+    return result;
+}
+
+export const likeBlog = async (blog_id: number, user_id: number) => {
+    try{
+        const [updateFavoriteTableResult] = await mysqlPool.query("INSERT INTO blogs_favorite_list (blog_id, user_id) VALUES (?, ?)", [blog_id, user_id]) as any;
+        if(updateFavoriteTableResult.affectedRows === 0) throw new Error("failed to update like");
+
+        const [result] : any = await mysqlPool.query("UPDATE blogs SET likes = likes+1 WHERE id = ?", [blog_id]);
+        if(result.affectedRows === 1){
+            return true;
+        }
+    }
+    catch(e : any){
+        console.log(`[Server-like-blog-db]: ${e.message}`);
+        throw new Error("failed to update like");
+    }
+}
+
+export const unlikeBlog = async (blog_id: number, user_id: number) => {
+    try{
+        const [updateFavoriteResult] = await mysqlPool.query("DELETE FROM blogs_favorite_list WHERE blog_id = ? AND user_id = ?", [blog_id, user_id]) as any;
+        if(updateFavoriteResult.affectedRows === 0){
+            throw new Error("failed to remove like");
+        }
+        const [result] : any = await mysqlPool.query("UPDATE blogs SET likes = likes-? WHERE id = ?", [updateFavoriteResult.affectedRows, blog_id]);
+        if(result.affectedRows === 1){
+            return true;
+        }
+    }
+    catch(e : any){
+        console.log(`[Server-remove-favorite-db]: ${e.message}`);
+        throw new Error("failed to remove favorite");
+    }
+};
+
+export const checkBlogFavorite = async (blog_id : number, user_id : number) => {
+    const [result] = await mysqlPool.query("SELECT * FROM blogs_favorite_list WHERE blog_id = ? AND user_id = ?", [blog_id, user_id]);
+    return result;
+}
+
+export const addViewsBlog = async (blog_id: number) => {
+    const [result] = await mysqlPool.query("UPDATE blogs SET views = views+1 WHERE id = ?", [blog_id]);
     return result;
 }

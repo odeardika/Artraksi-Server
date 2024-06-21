@@ -4,7 +4,11 @@ import {
     getBlog,
     getBlogById,
     getOtherBlog,
-    createNewBlog
+    createNewBlog,
+    likeBlog,
+    unlikeBlog,
+    checkArticleFavorite,
+    addViewToBlog
 } from "../controller/blogController";
 import { authToken } from "../middleware/validate.middleware";
 import { uploadBlogThumbnail } from "../middleware/multer.middleware";
@@ -20,3 +24,11 @@ router.get("/blog/detail/:id", getBlogById);
 router.get('/blog/others/:id', getOtherBlog)
 
 router.post('/blog/add', authToken, uploadBlogThumbnail.single("thumbnail") , createNewBlog);
+
+router.post('/blog/like', authToken, likeBlog);
+
+router.delete('/blog/like/:id', authToken, unlikeBlog);
+
+router.get('/blog/like/check/:id', authToken, checkArticleFavorite);
+
+router.put('/blog/view', addViewToBlog);

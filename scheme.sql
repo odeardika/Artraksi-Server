@@ -69,6 +69,15 @@ CREATE TABLE blog_contents (
     FOREIGN KEY (blog_id) REFERENCES blogs(id)
 );
 
+CREATE TABLE blogs_favorite_list (
+    id INT NOT NULL AUTO_INCREMENT,
+    blog_id INT NOT NULL,
+    user_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (blog_id) REFERENCES blogs(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
 CREATE TABLE articles_contents (
     id INT NOT NULL AUTO_INCREMENT,
     text_order INT NOT NULL,
