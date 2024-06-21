@@ -7,6 +7,9 @@ node_modules
 # production
 /build
 
+# upload
+/public/assets/blogs/
+
 # misc
 .DS_Store
 .vercel
