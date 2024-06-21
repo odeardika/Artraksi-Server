@@ -28,6 +28,11 @@ export const getUserEventsRemaindersList = async (user_id : number) => {
     return events;
 }
 
+export const getUserFavoritesBlogs = async (user_id : number) => {
+    const blogs = await mysqlPool.query(`SELECT * FROM blogs_favorite_list WHERE user_id = ?`, [user_id]) as any[];
+    return blogs;
+}
+
 export const updateUserProfilePicture = async (user_id : number, profile_img : string) => {
     const [result] = await mysqlPool.query("UPDATE users SET profile_img = ? WHERE id = ?", [profile_img, user_id]);
     return result;

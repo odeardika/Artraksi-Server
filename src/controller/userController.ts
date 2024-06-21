@@ -3,11 +3,13 @@ import {
     getUserById, 
     getUserFavoritesArticles,
     getUserEventsRemaindersList,
-    updateUserProfilePicture
+    updateUserProfilePicture,
+    getUserFavoritesBlogs
 } from "../utils/database/users";
 import { getArticleContentPreview, getArticleById } from "../utils/database/articles";
 import { formatDate, formatDateAndTime } from "../utils/changeDateFormat";
 import { getEventById } from "../utils/database/events";
+import { getBlogById, getBlogPreview } from "../utils/database/blog";
 
 export const getProfileImage = async (req : Request | any, res : Response) => {
     try {
@@ -59,6 +61,23 @@ export const getUserProfileDetail = async (req : Request | any, res : Response) 
             mainEvent.event_date = formatDateAndTime(date);
             events.push(mainEvent);
         }
+
+        const [blogs] = await getUserFavoritesBlogs(id);
+        if(blogs === undefined) throw new Error("Blogd not found");
+        const dataBlogs : any = [];
+        for(const blog of blogs){
+            const [mainBlog] : any = await getBlogById(blog.blog_id);
+            
+            
+            const preview : any = await getBlogPreview(blog.blog_id);
+            mainBlog.preview = preview.text;
+            
+            const [user] = await getUserById(mainBlog.creator_id) as any;
+            mainBlog.creator_name = user.username;
+            mainBlog.creator_profile = user.profile_img;
+            
+            dataBlogs.push(mainBlog);
+        }
         
 
 
@@ -69,7 +88,7 @@ export const getUserProfileDetail = async (req : Request | any, res : Response) 
                 email : user.email
             },
             favorite_article : dataArticles,
-            favorite_blog : [],
+            favorite_blog : dataBlogs,
             remainded_event : events
         });
 
