@@ -11,7 +11,8 @@ import {
     likeBlog as likeBlogDB,
     unlikeBlog as unlikeBlogDB,
     checkBlogFavorite as checkBlogFavoriteDB,
-    addViewsBlog
+    addViewsBlog,
+    searchBlogs as searchBlogsDB
 } from "../utils/database/blog";
 import { getUserById } from "../utils/database/users";
 
@@ -184,5 +185,32 @@ export const addViewToBlog = async (req : Request | any, res : Response) => {
     } catch (error : any) {
         console.log(`[Server-blog-controller]: ${error.message}`);
         res.status(500).json({message : "failed to add view to blog"});
+    }
+}
+
+export const searchBlogs = async (req : Request, res : Response) => {
+    try{
+        const keyword = req.query.search as string;
+        const rawBlogs = await searchBlogsDB(keyword) as any[];
+        const blogs : any[] = [];
+        for (const blog of rawBlogs) {
+            
+            const [user] = (await getUserById(blog.creator_id)) as any[];
+            blog.creator_name = user.username;
+            blog.creator_profile = user.profile_img;
+            
+            const [preview] = (await getBlogPreview(blog.id)) as any[];
+            blog.preview = preview.text;
+            
+            blogs.push(blog);
+        }
+
+        res.status(200).json(blogs);
+    }catch(error : any){
+        if(error.message == "Illegal argument to a regular expression."){
+            return;
+        }else{
+            console.log(`[Server-blog-controller]: ${error.message}`);
+        }
     }
 }

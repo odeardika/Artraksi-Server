@@ -82,3 +82,8 @@ export const addViewsBlog = async (blog_id: number) => {
     const [result] = await mysqlPool.query("UPDATE blogs SET views = views+1 WHERE id = ?", [blog_id]);
     return result;
 }
+
+export const searchBlogs = async (search : string) => {
+    const [blogs] = await mysqlPool.query(`SELECT * FROM blogs WHERE title REGEXP "${search}"`);
+    return blogs;
+}

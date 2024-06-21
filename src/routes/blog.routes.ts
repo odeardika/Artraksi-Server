@@ -8,7 +8,8 @@ import {
     likeBlog,
     unlikeBlog,
     checkArticleFavorite,
-    addViewToBlog
+    addViewToBlog,
+    searchBlogs
 } from "../controller/blogController";
 import { authToken } from "../middleware/validate.middleware";
 import { uploadBlogThumbnail } from "../middleware/multer.middleware";
@@ -32,3 +33,5 @@ router.delete('/blog/like/:id', authToken, unlikeBlog);
 router.get('/blog/like/check/:id', authToken, checkArticleFavorite);
 
 router.put('/blog/view', addViewToBlog);
+
+router.get("/blog/search", searchBlogs);
