@@ -1,3 +1,4 @@
+import exp from "constants";
 import {pool as mysqlPool} from "./connector";
 
 export type Event = {
@@ -66,4 +67,9 @@ export const removeReminderIntoDatabase = async (event_id : number, user_id : nu
 export const checkReminders = async (event_id : number, user_id : number) => {
     const [result] = await mysqlPool.query("SELECT * FROM reminder_lists WHERE event_id = ? AND user_id = ?", [event_id, user_id]) as any[][];
     return result;
+}
+
+export const searchEvents = async (search : string) => {
+    const [events] = await mysqlPool.query(`SELECT * FROM events WHERE title REGEXP "${search}"`);
+    return events;
 }

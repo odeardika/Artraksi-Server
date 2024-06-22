@@ -5,9 +5,11 @@ import {
     getEventDetail,
     addReminder,
     removeReminder,
-    checkEventReminder
+    checkEventReminder,
+    searchEvents
 } from "../controller/eventsController";
 import { authToken } from "../middleware/validate.middleware";
+
 
 
 export const router = Router();
@@ -15,6 +17,8 @@ export const router = Router();
 router.get("/events/upcoming/:limit", getUpcomingEvents);
 
 router.get("/events/upcoming", getAllEvents);
+
+router.get("/events/search", searchEvents);
 
 router.get("/events/:id", getEventDetail);
 

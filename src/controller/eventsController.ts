@@ -4,11 +4,11 @@ import {
     getEventGallery,
     getEventSchedule,
     addReminderIntoDatabase,
-    ReminderRequestBody,
     checkReminders,
     Event,
     EventSchedule,
     removeReminderIntoDatabase,
+    searchEvents as searchEventsDB
 } from "../utils/database/events";
 import { Request, Response } from "express";
 import { formatDate, formatDateAndTime } from "../utils/changeDateFormat";
@@ -121,4 +121,25 @@ export const checkEventReminder = async (req : Request | any, res : Response) =>
     }
 }
 
+
+export const searchEvents = async (req : Request, res : Response) => {
+    try{
+        const keyword = req.query.search as string;
+        const rawEvents = await searchEventsDB(keyword) as any[];
+        const events : any[] = [];
+        for (const event of rawEvents){
+            const date = new Date(event.event_date);
+            event.event_date = formatDateAndTime(date);
+            events.push(event);
+        }
+
+        res.status(200).json(events);
+    }catch(error : any){
+        if(error.message == "Illegal argument to a regular expression."){
+            return;
+        }else{
+            console.log(`[Server-event-controller]: ${error.message}`);
+        }
+    }
+}
 
