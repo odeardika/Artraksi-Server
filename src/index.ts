@@ -20,10 +20,7 @@ app.use(communitiesRoute);
 app.use(eventsRoute);
 app.use(userRoute);
 app.use(blogRoute);
-
-app.get("/", (req : Request, res : Response) => {
-    res.send(`<h1>Artraksi server is running</h1>`);
-});
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.listen(port, () => {
     console.log(`[server] Server is running at http://localhost:${port}`);
